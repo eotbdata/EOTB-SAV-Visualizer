@@ -34,6 +34,7 @@ SAVconnection <- odbcDriverConnect(paste0('driver={SQL Server};
                                            trusted_connection=no'))
 SAVdata <- sqlQuery(SAVconnection, "SELECT * FROM [dbo].[v_SAV_AcreageReport] order by CBPSEG")
 odbcClose(SAVconnection)
+keyring_lock()
 SAVdata <- setDT(SAVdata)
 
 #reformat SAV data
