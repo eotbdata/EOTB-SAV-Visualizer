@@ -46,13 +46,18 @@ baysegments <- st_transform(baysegments, crs = "+proj=longlat +datum=WGS84") #tr
 #                                            PWD=', key_get("dbpwd"), ';
 #                                            trusted_connection=no'))
 
+# reworking db connection 
+
+db_ip <- Sys.getenv("dbip")
+db_pwd <- Sys.getenv("dbpwd")
+
 SAVconnection <- dbConnect(
   odbc::odbc(),
   Driver   = "FreeTDS", # Standard Linux driver for SQL server. 
-  Server   = key_get("dbip"),
+  Server   = db_ip,
   Database = "tide",
   UID      = "tideRO",
-  PWD      = key_get("dbpwd"),
+  PWD      = db_pwd,
   Port     = 1433,     
   TDS_Version = 8.0     
 )
