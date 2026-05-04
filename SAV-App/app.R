@@ -56,12 +56,14 @@ db_pwd <- Sys.getenv("dbpwd")
 
 SAVconnection <- dbConnect(
   odbc::odbc(),
-  Driver   = "/prodrivers/sqlserver/bin/lib/libsqlserverodbc_sb64.so", #Posit's internal path for Posit Professional Driver
+  Driver   = "/prodrivers/sqlserver/bin/lib/libsqlserverodbc_sb64.so", 
   Server   = db_ip,
   Database = "tide",
   UID      = "tideRO",
   PWD      = db_pwd,
-  Port     = 1433
+  Port     = 1433,
+  TrustServerCertificate = "yes", # Swapped to string
+  Encrypt  = "yes"                # Swapped to string (Use "no" if your DB doesn't support SSL)
 )
 
 SAVdata <- dbGetQuery(SAVconnection, "SELECT * FROM [dbo].[v_SAV_AcreageReport] order by CBPSEG")
