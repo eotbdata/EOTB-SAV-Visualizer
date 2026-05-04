@@ -37,7 +37,7 @@ baysegments <- st_transform(baysegments, crs = "+proj=longlat +datum=WGS84") #tr
 
 ## Fetch SAV data from DB
 
-SAVconnection <- odbcDriverConnect(paste0('driver={SQL Server};
+SAVconnection <- odbcDriverConnect(paste0('driver={ODBC Driver 17 for SQL Server};
                                            server=', key_get("dbip"), ';
                                            database=tide;
                                            uid=tideRO;
