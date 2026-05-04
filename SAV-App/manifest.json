@@ -146,33 +146,6 @@
         "Built": "R 4.5.2; ; 2025-11-01 00:30:56 UTC; windows"
       }
     },
-    "RODBC": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
-      "description": {
-        "Package": "RODBC",
-        "Version": "1.3-26.1",
-        "Revision": "$Rev: 3689 $",
-        "Date": "2025-12-15",
-        "Authors@R": "c(person(\"Brian\", \"Ripley\", role = c(\"aut\", \"cre\"),\n                    email = \"Brian.Ripley@R-project.org\"),\n             person(\"Michael\", \"Lapsley\", role = \"aut\", \n\t            comment = \"1999 to Oct 2002\"))",
-        "Title": "ODBC Database Access",
-        "Description": "An ODBC database interface.",
-        "SystemRequirements": "An ODBC3 driver manager and drivers.",
-        "Depends": "R (>= 4.0.0)",
-        "Imports": "stats",
-        "LazyLoad": "yes",
-        "Biarch": "yes",
-        "License": "GPL-2 | GPL-3",
-        "NeedsCompilation": "yes",
-        "Packaged": "2025-12-15 11:32:40 UTC; ripley",
-        "Author": "Brian Ripley [aut, cre],\n  Michael Lapsley [aut] (1999 to Oct 2002)",
-        "Maintainer": "Brian Ripley <Brian.Ripley@R-project.org>",
-        "Repository": "CRAN",
-        "Date/Publication": "2025-12-15 12:32:58",
-        "Built": "R 4.5.2; x86_64-w64-mingw32; 2025-12-18 00:52:21 UTC; windows",
-        "Archs": "x64"
-      }
-    },
     "Rcpp": {
       "Source": "CRAN",
       "Repository": "https://cran.rstudio.com",
@@ -2199,6 +2172,41 @@
         "Built": "R 4.5.2; ; 2025-11-15 16:28:40 UTC; windows"
       }
     },
+    "odbc": {
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
+      "description": {
+        "Package": "odbc",
+        "Title": "Connect to ODBC Compatible Databases (using the DBI Interface)",
+        "Version": "1.6.1",
+        "Authors@R": "c(\n    person(\"Jim\", \"Hester\", role = \"aut\"),\n    person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = c(\"aut\", \"cre\")),\n    person(\"Oliver\", \"Gjoneski\", role = \"aut\"),\n    person(\"lexicalunit\", role = \"cph\",\n           comment = \"nanodbc library\"),\n    person(\"Google Inc.\", role = \"cph\",\n           comment = \"cctz library\"),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
+        "Description": "A DBI-compatible interface to ODBC databases.",
+        "License": "MIT + file LICENSE",
+        "URL": "https://odbc.r-dbi.org, https://github.com/r-dbi/odbc,\nhttps://solutions.posit.co/connections/db/",
+        "BugReports": "https://github.com/r-dbi/odbc/issues",
+        "Depends": "R (>= 4.0.0)",
+        "Imports": "bit64, blob (>= 1.2.0), cli, DBI (>= 1.0.0), hms, lifecycle,\nmethods, Rcpp (>= 0.12.11), rlang (>= 1.1.0)",
+        "Suggests": "connectcreds, covr, DBItest, httr2, knitr, magrittr,\npaws.common, rmarkdown, RSQLite, testthat (>= 3.0.0), tibble,\nwithr",
+        "LinkingTo": "Rcpp",
+        "ByteCompile": "true",
+        "Config/Needs/check": "pkgbuild",
+        "Config/Needs/website": "tidyverse/tidytemplate",
+        "Config/testthat/edition": "3",
+        "Encoding": "UTF-8",
+        "RoxygenNote": "7.3.2",
+        "SystemRequirements": "GNU make, An ODBC3 driver manager and drivers.",
+        "Collate": "'RcppExports.R' 'aaa-odbc-data-type.R' 'connection-pane.R'\n'dbi-connection.R' 'odbc-connection.R' 'db.R' 'dbi-driver.R'\n'dbi-result.R' 'dbi-table.R' 'dbi.R' 'driver-access.R'\n'driver-bigquery.R' 'driver-databricks.R' 'driver-db2.R'\n'driver-hana.R' 'driver-hive.R' 'driver-impala.R'\n'driver-mysql.R' 'driver-netezza.R' 'driver-oracle.R'\n'driver-postgres.R' 'driver-redshift.R' 'driver-snowflake.R'\n'driver-spark.R' 'driver-sql-server.R' 'driver-sqlite.R'\n'driver-teradata.R' 'driver-vertica.R'\n'import-standalone-obj-type.R'\n'import-standalone-types-check.R' 'odbc-config.R'\n'odbc-data-sources.R' 'odbc-drivers.R' 'odbc-package.R'\n'odbc.R' 'utils.R' 'zzz.R'",
+        "VignetteBuilder": "knitr",
+        "NeedsCompilation": "yes",
+        "Packaged": "2025-03-26 20:22:27 UTC; hadleywickham",
+        "Author": "Jim Hester [aut],\n  Hadley Wickham [aut, cre],\n  Oliver Gjoneski [aut],\n  lexicalunit [cph] (nanodbc library),\n  Google Inc. [cph] (cctz library),\n  Posit Software, PBC [cph, fnd]",
+        "Maintainer": "Hadley Wickham <hadley@posit.co>",
+        "Repository": "CRAN",
+        "Date/Publication": "2025-03-27 12:10:02 UTC",
+        "Built": "R 4.5.0; x86_64-w64-mingw32; 2025-06-16 01:58:56 UTC; windows",
+        "Archs": "x64"
+      }
+    },
     "openssl": {
       "Source": "CRAN",
       "Repository": "https://cran.rstudio.com",
@@ -3944,7 +3952,7 @@
   },
   "files": {
     "app.R": {
-      "checksum": "ed79f75284dac656daae6e541b347753"
+      "checksum": "6f2000b57bf838882c9b4a3e967a6707"
     },
     "www/DNR_logo_final.png": {
       "checksum": "110bc7dee8b53c55d4048f031747b5d2"
