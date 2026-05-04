@@ -23,7 +23,9 @@ library(tidyverse)
 library(data.table)
 library(plotly)
 library(bslib)
-library(RODBC)
+#library(RODBC) #trying out a different db connection
+library(DBI)
+library(odbc)
 library(keyring)
 
 ############### DEPENDENCIES ##################################################
@@ -37,14 +39,26 @@ baysegments <- st_transform(baysegments, crs = "+proj=longlat +datum=WGS84") #tr
 
 ## Fetch SAV data from DB
 
-SAVconnection <- odbcDriverConnect(paste0('driver={ODBC Driver 17 for SQL Server};
-                                           server=', key_get("dbip"), ';
-                                           database=tide;
-                                           uid=tideRO;
-                                           PWD=', key_get("dbpwd"), ';
-                                           trusted_connection=no'))
-SAVdata <- sqlQuery(SAVconnection, "SELECT * FROM [dbo].[v_SAV_AcreageReport] order by CBPSEG")
-odbcClose(SAVconnection)
+# SAVconnection <- odbcDriverConnect(paste0('driver={ODBC Driver 17 for SQL Server};
+#                                            server=', key_get("dbip"), ';
+#                                            database=tide;
+#                                            uid=tideRO;
+#                                            PWD=', key_get("dbpwd"), ';
+#                                            trusted_connection=no'))
+
+SAVconnection <- dbConnect(
+  odbc::odbc(),
+  Driver   = "FreeTDS", # Standard Linux driver for SQL server. 
+  Server   = key_get("dbip"),
+  Database = "tide",
+  UID      = "tideRO",
+  PWD      = key_get("dbpwd"),
+  Port     = 1433,     
+  TDS_Version = 8.0     
+)
+
+SAVdata <- dbGetQuery(SAVconnection, "SELECT * FROM [dbo].[v_SAV_AcreageReport] order by CBPSEG")
+dbDisconnect(SAVconnection)
 keyring_lock()
 SAVdata <- setDT(SAVdata)
 
