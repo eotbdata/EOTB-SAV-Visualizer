@@ -30,9 +30,6 @@ library(keyring)
 
 ############### DEPENDENCIES ##################################################
 
-#step one: figure out posit's drivers
-print(odbc::odbcListDrivers())
-
 ## Bring in segments for map
 
 baysegments <- st_read(here( "Chesapeake_Bay_104_Segments"))
@@ -54,15 +51,18 @@ baysegments <- st_transform(baysegments, crs = "+proj=longlat +datum=WGS84") #tr
 db_ip <- Sys.getenv("dbip")
 db_pwd <- Sys.getenv("dbpwd")
 
+#just to try troubleshooting
+print(db_ip)
+
 SAVconnection <- dbConnect(
   odbc::odbc(),
-  Driver   = "/prodrivers/sqlserver/bin/lib/libsqlserverodbc_sb64.so", #Posit's internal path for Posit Professional Driver
+  #Driver   = "/prodrivers/sqlserver/bin/lib/libsqlserverodbc_sb64.so", #Posit's internal path for Posit Professional Driver
+  Driver   = 'SQL Server',
   Server   = db_ip,
   Database = "tide",
   UID      = "tideRO",
   PWD      = db_pwd,
-  Port     = 1433,     
-  TDS_Version = 8.0     
+  Port     = 1433
 )
 
 SAVdata <- dbGetQuery(SAVconnection, "SELECT * FROM [dbo].[v_SAV_AcreageReport] order by CBPSEG")
