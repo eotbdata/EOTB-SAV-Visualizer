@@ -56,7 +56,7 @@ db_pwd <- Sys.getenv("dbpwd")
 
 SAVconnection <- dbConnect(
   odbc::odbc(),
-  Driver   = "FreeTDS", # Standard Linux driver for SQL server. 
+  Driver   = "/prodrivers/sqlserver/bin/lib/libsqlserverodbc_sb64.so", #Posit's internal path for Posit Professional Driver
   Server   = db_ip,
   Database = "tide",
   UID      = "tideRO",
