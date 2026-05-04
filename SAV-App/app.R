@@ -3,17 +3,28 @@
 library(groundhog)
 library(shiny)
 
-groundhog.day <- "2026-04-01"
+# groundhog.day <- "2026-04-01"
+# 
+# groundhog.library(leaflet, groundhog.day)
+# groundhog.library(sf, groundhog.day)
+# groundhog.library(here, groundhog.day)
+# groundhog.library(tidyverse, groundhog.day)
+# groundhog.library(data.table, groundhog.day)
+# groundhog.library(plotly, groundhog.day)
+# groundhog.library(bslib, groundhog.day)
+# groundhog.library(RODBC, groundhog.day)
+# groundhog.library(keyring, groundhog.day)
 
-groundhog.library(leaflet, groundhog.day)
-groundhog.library(sf, groundhog.day)
-groundhog.library(here, groundhog.day)
-groundhog.library(tidyverse, groundhog.day)
-groundhog.library(data.table, groundhog.day)
-groundhog.library(plotly, groundhog.day)
-groundhog.library(bslib, groundhog.day)
-groundhog.library(RODBC, groundhog.day)
-groundhog.library(keyring, groundhog.day)
+#for now, try without groundhog just to see if it works
+library(leaflet)
+library(sf)
+library(here)
+library(tidyverse)
+library(data.table)
+library(plotly)
+library(bslib)
+library(RODBC)
+library(keyring)
 
 ############### DEPENDENCIES ##################################################
 
