@@ -23,7 +23,6 @@ library(tidyverse)
 library(data.table)
 library(plotly)
 library(bslib)
-#library(RODBC) #trying out a different db connection
 library(DBI)
 library(odbc)
 library(keyring)
@@ -37,27 +36,27 @@ baysegments <- st_transform(baysegments, crs = "+proj=longlat +datum=WGS84") #tr
 
 #possibly filter for just MD segments
 
-## Fetch SAV data from DB
+# Shiny recommends using DBI + ODBC, so this is the reworked DB connection
 
-# SAVconnection <- odbcDriverConnect(paste0('driver={ODBC Driver 17 for SQL Server};
-#                                            server=', key_get("dbip"), ';
-#                                            database=tide;
-#                                            uid=tideRO;
-#                                            PWD=', key_get("dbpwd"), ';
-#                                            trusted_connection=no'))
+#for local testing, use this:
+# SAVconnection <- dbConnect(
+#   odbc::odbc(),
+#   Driver   = 'SQL Server',
+#   Server   = key_get("dbip"),
+#   Database = "tide",
+#   UID      = "tideRO",
+#   PWD      = key_get("dbpwd"),
+#   Port     = 1433
+# )
 
-# reworking db connection 
+#for posit, use this: 
 
 db_ip <- Sys.getenv("dbip")
 db_pwd <- Sys.getenv("dbpwd")
 
-#just to try troubleshooting
-print(db_ip)
-
 SAVconnection <- dbConnect(
   odbc::odbc(),
-  #Driver   = "/prodrivers/sqlserver/bin/lib/libsqlserverodbc_sb64.so", #Posit's internal path for Posit Professional Driver
-  Driver   = 'SQL Server',
+  Driver   = "/prodrivers/sqlserver/bin/lib/libsqlserverodbc_sb64.so", #Posit's internal path for Posit Professional Driver
   Server   = db_ip,
   Database = "tide",
   UID      = "tideRO",
