@@ -27,6 +27,19 @@ library(DBI)
 library(odbc)
 library(keyring)
 
+#############
+
+#Temp: identifying posit's IP address for Becca
+
+library(httr)
+
+# Ask the internet what IP we are dialing out from
+ip_check <- GET("https://checkip.amazonaws.com")
+outbound_ip <- trimws(content(ip_check, "text"))
+
+# Print it to your Posit deployment log
+print(paste("URGENT FOR IT: The Posit Connect Outbound IP is:", outbound_ip))
+
 ############### DEPENDENCIES ##################################################
 
 ## Bring in segments for map
