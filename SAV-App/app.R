@@ -30,6 +30,9 @@ library(keyring)
 
 ############### DEPENDENCIES ##################################################
 
+#step one: figure out posit's drivers
+print(odbc::odbcListDrivers())
+
 ## Bring in segments for map
 
 baysegments <- st_read(here( "Chesapeake_Bay_104_Segments"))
