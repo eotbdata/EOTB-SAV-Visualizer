@@ -47,42 +47,7 @@ print(paste("URGENT FOR IT: The Posit Connect Outbound IP is:", outbound_ip))
 baysegments <- st_read(here( "Chesapeake_Bay_104_Segments"))
 baysegments <- st_transform(baysegments, crs = "+proj=longlat +datum=WGS84") #transform to DD
 
-#possibly filter for just MD segments
-
-# Shiny recommends using DBI + ODBC, so this is the reworked DB connection
-
-#for local testing, use this:
-# SAVconnection <- dbConnect(
-#   odbc::odbc(),
-#   Driver   = 'SQL Server',
-#   Server   = key_get("dbip"),
-#   Database = "tide",
-#   UID      = "tideRO",
-#   PWD      = key_get("dbpwd"),
-#   Port     = 1433
-# )
-
-#for posit, use this: 
-
-db_ip <- Sys.getenv("dbip")
-db_pwd <- Sys.getenv("dbpwd")
-
-SAVconnection <- dbConnect(
-  odbc::odbc(),
-  Driver   = "/prodrivers/sqlserver/bin/lib/libsqlserverodbc_sb64.so", 
-  Server   = db_ip,
-  Database = "tide",
-  UID      = "tideRO",
-  PWD      = db_pwd,
-  Port     = 1433,
-  TrustServerCertificate = "yes", # Swapped to string
-  Encrypt  = "yes"                # Swapped to string (Use "no" if your DB doesn't support SSL)
-)
-
-SAVdata <- dbGetQuery(SAVconnection, "SELECT * FROM [dbo].[v_SAV_AcreageReport] order by CBPSEG")
-dbDisconnect(SAVconnection)
-keyring_lock()
-SAVdata <- setDT(SAVdata)
+SAVdata <- fread(here("SAV-App", "SAVdata.csv"))
 
 #reformat SAV data
 
