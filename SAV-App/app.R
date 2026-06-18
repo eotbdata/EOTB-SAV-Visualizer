@@ -46,6 +46,11 @@ library(keyring)
 
 baysegments <- st_read(here( "Chesapeake_Bay_104_Segments"))
 baysegments <- st_transform(baysegments, crs = "+proj=longlat +datum=WGS84") #transform to DD
+#this little bit of code modifies the CBPTF segement names
+baysegments <- baysegments %>%
+  mutate(CBPSEG := case_when(CBSEG_104 == "CB1TF1" ~ "CB1TF1",
+                             CBSEG_104 == "CB1TF2" ~ "CB1TF2",
+                             TRUE ~ CBPSEG))
 
 SAVdata <- fread(here("SAV-App", "SAVdata.csv"))
 
@@ -84,6 +89,24 @@ SAVdata_long$Comments <- as.character(SAVdata_long$Comments)
 segment_mapping <- unique(SAVdata_long[, c("Segment_Name", "CBPSEG")])
 dynamic_choices <- setNames(segment_mapping$CBPSEG, segment_mapping$Segment_Name)
 
+#bring in stuff for the sav map
+
+sav2023 <- st_read(here("2023shp"))
+sav2023 <- st_transform(sav2023, crs = "+proj=longlat +datum=WGS84") #transform to DD
+
+sav2022 <- st_read(here("2022shp"))
+sav2022 <- st_transform(sav2022, crs = "+proj=longlat +datum=WGS84") #transform to DD
+
+sav2021 <- st_read(here("2021shp"))
+sav2021 <- st_transform(sav2021, crs = "+proj=longlat +datum=WGS84") #transform to DD
+
+sav2020 <- st_read(here("2020shp"))
+sav2020 <- st_transform(sav2020, crs = "+proj=longlat +datum=WGS84") #transform to DD
+
+sav2019 <- st_read(here("2019shp"))
+sav2019 <- st_transform(sav2019, crs = "+proj=longlat +datum=WGS84") #transform to DD
+
+
 ################## UI ##########################################################
 ui <- fluidPage(
   
@@ -121,7 +144,7 @@ ui <- fluidPage(
                      helpText(HTML(
                        "<p>Welcome to the Maryland Department of Natural Resources (MDDNR) Submerged Aquatic Vegetation (SAV) Visualizer.
                        This tool illustrates SAV coverage data collected during
-                       <a href='https://www.vims.edu/research/units/programs/sav/methods/'>annual arial surveys</a>
+                       <a href='https://www.vims.edu/research/units/programs/sav/methods/'>annual aerial surveys</a>
                        conducted by the Virginia Institute of Marine Science (VIMS).</p>
                        
                        <p>To begin, select a Bay segment from the drop-down menu above. 
@@ -144,6 +167,12 @@ ui <- fluidPage(
            plotlyOutput("SAVCoverage"))
   ),
   br(),
+  h4("VIMS SAV Aerial Survey Bed Locations (2019-2023)", style="text-align:center"),
+  fluidRow(
+    column(width=12,
+           leafletOutput("CoverageMap", height = "800px")
+    )
+  ),
   br()
 )
 
@@ -235,8 +264,8 @@ server <- function(input, output, session) {
         scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
         geom_hline(mapping=aes(yintercept=57000), color="navy")+
         geom_hline(mapping=aes(yintercept=79800), color="navy")+
-        annotate("text", x=6, y=59200, label="2017 Restoration Goal", color="navy")+
-        annotate("text", x=6, y=82000, label="2025 Restoration Goal", color="navy")+
+        annotate("text", x=6, y=59200, label="2017 Restoration Goal: 75000 acres", color="navy")+
+        annotate("text", x=6, y=82000, label="2025 Restoration Goal: 79800 acres", color="navy")+
         ggtitle("Maryland Submerged Aquatic Vegetation (SAV) Abundance")+
         ylab("Abundance (Acres)")+
         xlab("Years")+
@@ -248,9 +277,9 @@ server <- function(input, output, session) {
       
       SAV_plotly <- SAV_plotly %>%
         layout(
-          margin = list(b = 100), # Increases bottom margin to fit the text
+          margin = list(b = 100), 
           annotations = list(
-            x = 0, y = -0.30,     # Adjust y negatively to push it further down
+            x = 0, y = -0.30,     
             text = caption_text,
             showarrow = FALSE,
             xref = 'paper', yref = 'paper',
@@ -291,11 +320,21 @@ server <- function(input, output, session) {
         scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
         geom_hline(SAVforgraph, mapping=aes(yintercept=RestorationAcreageGoal), color="navy")+
         annotate("text", 
-                 x=5, 
-                 y=ifelse(unique(SAVforgraph$RestorationAcreageGoal) > 3, 
-                          sum(unique(SAVforgraph$RestorationAcreageGoal)+unique(SAVforgraph$RestorationAcreageGoal)*0.1),
-                          sum(unique(SAVforgraph$RestorationAcreageGoal)+0.2)), 
-                 label="Restoration Goal", color="navy")+
+                 x=7, 
+                 y = {
+                   goal <- unique(SAVforgraph$RestorationAcreageGoal)
+                   if (is.na(goal) || goal == 0) {
+                     0.1
+                   } else if (goal >= 3) {
+                     goal + (goal * 0.1)
+                   } else {
+                     goal + 10 #this condition only captures a single river's goal -- adjust as needed for 2025's data
+                   }
+                 },
+                 label = {
+                   goal <- unique(SAVforgraph$RestorationAcreageGoal)
+                   if (is.na(goal)) "No Restoration Goal Set" else paste0("Restoration Goal: ", goal, " acres")
+                 }, color="navy")+
         ggtitle(paste(unique(SAVforgraph$Segment_Salinity)))+
         ylab("Abundance (Acres)")+
         xlab("Years")+
@@ -335,6 +374,40 @@ server <- function(input, output, session) {
       write.csv(SAVreactive(), file, quote = FALSE, row.names = FALSE) 
     }
   )
+  
+  output$CoverageMap <- renderLeaflet({
+    
+    
+    savmap <- leaflet() %>%
+      addProviderTiles(providers$Esri.WorldTopoMap) %>%
+      setView(lng = -76.3, lat = 38.7, zoom = 8) %>%
+      addPolygons(data = sav2019, color = "#B9DCAC", weight = 2, opacity = 1, 
+                  label = "SAV Coverage 2019", 
+                  group = "SAV Coverage 2019") %>%
+      addPolygons(data = sav2020, color = "#9ECF8C", weight = 2, opacity = 1, 
+                  label = "SAV Coverage 2020", 
+                  group = "SAV Coverage 2020") %>%
+      addPolygons(data = sav2021, color = "#82C16C", weight = 2, opacity = 1, 
+                  label = "SAV Coverage 2021", 
+                  group = "SAV Coverage 2021") %>%
+      addPolygons(data = sav2022, color = "#67B44B", weight = 2, opacity = 1,
+                  label = "SAV Coverage 2022",
+                  group = "SAV Coverage 2022") %>%
+      addPolygons(data = sav2023, color = "#427330", weight = 2, opacity = 1,
+                  label = "SAV Coverage 2023",
+                  group = "SAV Coverage 2023") %>%
+      addLayersControl(
+        overlayGroups = c("SAV Coverage 2019",
+                          "SAV Coverage 2020",
+                          "SAV Coverage 2021",
+                          "SAV Coverage 2022",
+                          "SAV Coverage 2023"
+        ),
+        options = layersControlOptions(collapsed = FALSE))
+    savmap
+    
+
+  })
   
   
 }
