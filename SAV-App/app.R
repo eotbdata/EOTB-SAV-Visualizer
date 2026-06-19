@@ -11,6 +11,10 @@ library(data.table)
 library(plotly)
 library(bslib)
 
+#run these before pushing to posit if you add more libraries
+#library(rsconnect)
+#writeManifest(appDir = here("SAV-App"))
+
 ############### DEPENDENCIES ##################################################
 
 ## Bring in segments for map
