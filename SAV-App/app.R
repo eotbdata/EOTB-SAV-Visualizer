@@ -239,14 +239,22 @@ server <- function(input, output, session) {
         scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
         geom_hline(mapping=aes(yintercept=79800), color="navy")+
         annotate("text", x=7, y=82000, label="Restoration Goal: 79800 acres", color="navy")+
-        ggtitle("Maryland Submerged Aquatic Vegetation (SAV) Abundance")+
+        #ggtitle("Maryland Submerged Aquatic Vegetation (SAV) Abundance")+
         ylab("Abundance (Acres)")+
         xlab("Years")+
         theme_classic()+
         theme(text=element_text(size=15),
               axis.text.x = element_text(size=10, angle = 45, vjust = 0.5, hjust=1))
       
-      SAV_plotly <- ggplotly(SAVgg, tooltip = "text")
+      SAV_plotly <- ggplotly(SAVgg, tooltip = "text") %>%
+        layout(
+          margin = list(t = 80), 
+          title = list(
+            text = "Maryland Submerged Aquatic Vegetation (SAV) Abundance",
+            y = 0.90,      
+            yanchor = "top"
+          )
+        )  
       
       SAV_plotly <- SAV_plotly %>%
         layout(
@@ -308,14 +316,22 @@ server <- function(input, output, session) {
                    goal <- unique(SAVforgraph$RestorationAcreageGoal)
                    if (is.na(goal)) "No Restoration Goal Set" else paste0("Restoration Goal: ", goal, " acres")
                  }, color="navy")+
-        ggtitle(paste(unique(SAVforgraph$Segment_Salinity)))+
+        #ggtitle(paste(unique(SAVforgraph$Segment_Salinity)))+
         ylab("Abundance (Acres)")+
         xlab("Years")+
         theme_classic()+
         theme(text=element_text(size=15),
               axis.text.x = element_text(size=10, angle = 45, vjust = 0.5, hjust=1))
       
-      SAV_plotly <- ggplotly(SAVgg, tooltip = "text")
+   SAV_plotly <- ggplotly(SAVgg, tooltip = "text") %>%
+     layout(
+       margin = list(t = 80), 
+       title = list(
+         text = paste(unique(SAVforgraph$Segment_Salinity)),
+         y = 0.90,      
+         yanchor = "top"
+       )
+     )  
       
       if (caption_text != "") {
         SAV_plotly <- SAV_plotly %>%
