@@ -2,43 +2,14 @@
 
 library(groundhog)
 library(shiny)
-
-# groundhog.day <- "2026-04-01"
-# 
-# groundhog.library(leaflet, groundhog.day)
-# groundhog.library(sf, groundhog.day)
-# groundhog.library(here, groundhog.day)
-# groundhog.library(tidyverse, groundhog.day)
-# groundhog.library(data.table, groundhog.day)
-# groundhog.library(plotly, groundhog.day)
-# groundhog.library(bslib, groundhog.day)
-# groundhog.library(RODBC, groundhog.day)
-# groundhog.library(keyring, groundhog.day)
-
-#for now, try without groundhog just to see if it works
 library(leaflet)
+library(leafgl)
 library(sf)
 library(here)
 library(tidyverse)
 library(data.table)
 library(plotly)
 library(bslib)
-library(DBI)
-library(odbc)
-library(keyring)
-
-#############
-
-#Temp: identifying posit's IP address for Becca
-
-# library(httr)
-# 
-# # Ask the internet what IP we are dialing out from
-# ip_check <- GET("https://checkip.amazonaws.com")
-# outbound_ip <- trimws(content(ip_check, "text"))
-# 
-# # Print it to your Posit deployment log
-# print(paste("URGENT FOR IT: The Posit Connect Outbound IP is:", outbound_ip))
 
 ############### DEPENDENCIES ##################################################
 
@@ -94,16 +65,16 @@ dynamic_choices <- setNames(segment_mapping$CBPSEG, segment_mapping$Segment_Name
 sav2023 <- st_read(here("2023shp"))
 sav2023 <- st_transform(sav2023, crs = "+proj=longlat +datum=WGS84") #transform to DD
 
-sav2022 <- st_read(here("2022shp"))
+sav2022 <- st_read(here("2022shp")) 
 sav2022 <- st_transform(sav2022, crs = "+proj=longlat +datum=WGS84") #transform to DD
 
-sav2021 <- st_read(here("2021shp"))
+sav2021 <- st_read(here("2021shp"), promote_to_multi=FALSE)
 sav2021 <- st_transform(sav2021, crs = "+proj=longlat +datum=WGS84") #transform to DD
 
-sav2020 <- st_read(here("2020shp"))
+sav2020 <- st_read(here("2020shp"), promote_to_multi=FALSE)
 sav2020 <- st_transform(sav2020, crs = "+proj=longlat +datum=WGS84") #transform to DD
 
-sav2019 <- st_read(here("2019shp"))
+sav2019 <- st_read(here("2019shp"), promote_to_multi=FALSE)
 sav2019 <- st_transform(sav2019, crs = "+proj=longlat +datum=WGS84") #transform to DD
 
 
@@ -262,10 +233,8 @@ server <- function(input, output, session) {
                                        ))) +
         geom_bar(stat="identity", position="dodge", fill= "#6b8e23")+
         scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
-        geom_hline(mapping=aes(yintercept=57000), color="navy")+
         geom_hline(mapping=aes(yintercept=79800), color="navy")+
-        annotate("text", x=6, y=59200, label="2017 Restoration Goal: 75000 acres", color="navy")+
-        annotate("text", x=6, y=82000, label="2025 Restoration Goal: 79800 acres", color="navy")+
+        annotate("text", x=7, y=82000, label="Restoration Goal: 79800 acres", color="navy")+
         ggtitle("Maryland Submerged Aquatic Vegetation (SAV) Abundance")+
         ylab("Abundance (Acres)")+
         xlab("Years")+
@@ -377,25 +346,24 @@ server <- function(input, output, session) {
   
   output$CoverageMap <- renderLeaflet({
     
-    
     savmap <- leaflet() %>%
       addProviderTiles(providers$Esri.WorldTopoMap) %>%
       setView(lng = -76.3, lat = 38.7, zoom = 8) %>%
-      addPolygons(data = sav2019, color = "#B9DCAC", weight = 2, opacity = 1, 
-                  label = "SAV Coverage 2019", 
-                  group = "SAV Coverage 2019") %>%
-      addPolygons(data = sav2020, color = "#9ECF8C", weight = 2, opacity = 1, 
-                  label = "SAV Coverage 2020", 
-                  group = "SAV Coverage 2020") %>%
-      addPolygons(data = sav2021, color = "#82C16C", weight = 2, opacity = 1, 
-                  label = "SAV Coverage 2021", 
-                  group = "SAV Coverage 2021") %>%
-      addPolygons(data = sav2022, color = "#67B44B", weight = 2, opacity = 1,
-                  label = "SAV Coverage 2022",
-                  group = "SAV Coverage 2022") %>%
-      addPolygons(data = sav2023, color = "#427330", weight = 2, opacity = 1,
-                  label = "SAV Coverage 2023",
-                  group = "SAV Coverage 2023") %>%
+      addGlPolygons(data = sav2019, color = "#B9DCAC", weight = 2, opacity = 1,
+                    popup = "SAV Coverage 2019",
+                    group = "SAV Coverage 2019") %>%
+      addGlPolygons(data = sav2020, color = "#9ECF8C", weight = 2, opacity = 1,
+                    popup = "SAV Coverage 2020",
+                    group = "SAV Coverage 2020") %>%
+      addGlPolygons(data = sav2021, color = "#82C16C", weight = 2, opacity = 1,
+                    popup = "SAV Coverage 2021",
+                    group = "SAV Coverage 2021") %>%
+      addGlPolygons(data = sav2022, color = "#67B44B", weight = 2, opacity = 1,
+                    popup = "SAV Coverage 2022",
+                    group = "SAV Coverage 2022") %>%
+      addGlPolygons(data = sav2023, color = "#427330", weight = 2, opacity = 1,
+                    popup = "SAV Coverage 2023",
+                    group = "SAV Coverage 2023") %>%
       addLayersControl(
         overlayGroups = c("SAV Coverage 2019",
                           "SAV Coverage 2020",
@@ -405,10 +373,8 @@ server <- function(input, output, session) {
         ),
         options = layersControlOptions(collapsed = FALSE))
     savmap
-    
 
   })
-  
   
 }
 
