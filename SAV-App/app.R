@@ -27,10 +27,9 @@ baysegments <- baysegments %>%
                              CBSEG_104 == "CB1TF2" ~ "CB1TF2",
                              TRUE ~ CBPSEG))
 
-SAVdata <- fread(here("SAV-App", "SAVdata.csv"))
+SAVdata <- fread(here("SAV-App", "SAVdata_alphabetized.csv"))
 
 #reformat SAV data
-
 SAVdata_long <- melt(SAVdata, 
                      id.vars=c(1:5, 86),
                      measure.vars=c("1984", "1985", "1986", "1987", "1989", "1990", "1991", "1992", "1993",
@@ -63,6 +62,9 @@ SAVdata_long$Comments <- as.character(SAVdata_long$Comments)
 #couple of bits to format the selection menu
 segment_mapping <- unique(SAVdata_long[, c("Segment_Name", "CBPSEG")])
 dynamic_choices <- setNames(segment_mapping$CBPSEG, segment_mapping$Segment_Name)
+
+#merge names of segment mapping back to bay segments
+baysegments <- merge(baysegments, segment_mapping, by=c("CBPSEG"))
 
 #bring in stuff for the sav map
 
@@ -104,7 +106,7 @@ ui <- fluidPage(
                      br(),
                      actionButton(
                        inputId = "recenter", 
-                       label = "Recenter Map",
+                       label = "Recenter Map to Maryland Chesapeake Bay",
                        class = "btn-primary"
                      ),
                      br(),
@@ -119,7 +121,7 @@ ui <- fluidPage(
                      helpText(HTML(
                        "<p>Welcome to the Maryland Department of Natural Resources (MDDNR) Submerged Aquatic Vegetation (SAV) Visualizer.
                        This tool illustrates SAV coverage data collected during
-                       <a href='https://www.vims.edu/research/units/programs/sav/methods/'>annual aerial surveys</a>
+                       <a href='https://www.vims.edu/research/units/programs/sav/methods/' target='_blank'>annual aerial surveys</a>
                        conducted by the Virginia Institute of Marine Science (VIMS).</p>
                        
                        <p>To begin, select a Bay segment from the drop-down menu above. 
@@ -162,13 +164,16 @@ server <- function(input, output, session) {
       addProviderTiles(providers$Esri.WorldTopoMap) %>%
       setView(lng = -76.2, lat = 38.3, zoom = 8) %>%
       addPolygons(data = baysegments,
-                  popup = ~CBPSEG,
+                  layerId = ~CBSEG_104, #this codes for when users click on the segment
+                  popup = paste0(baysegments$Segment_Name, ", (", baysegments$CBPSEG, ")"),
                   group = paste("Bay", "Segments", sep="<br>"),
                   opacity = 0.3,
                   weight = 1,
                   smoothFactor = 0.5,
                   color = "navy")
   })
+  
+  #observe for when segment selection drop-down is selected
   
   observeEvent(input$segment_selection, {
     
@@ -183,14 +188,14 @@ server <- function(input, output, session) {
     selected_polygon <- baysegments[baysegments$CBPSEG == input$segment_selection, ]
     
     # Calculate the bounding box to center the map (sf method)
-    bbox <- sf::st_bbox(selected_polygon)
+    bbox <- st_bbox(selected_polygon)
     
     # Use leafletProxy to modify the existing map
     leafletProxy("SegmentMap") %>%
       clearGroup("highlighted_polygon") %>%
       addPolygons(
         data = selected_polygon, 
-        popup = ~CBPSEG,
+        popup = paste0(selected_polygon$Segment_Name, " (", selected_polygon$CBPSEG, ")"),
         stroke = TRUE, 
         weight = 4, # Slightly thicker to stand out
         color = "goldenrod", 
@@ -213,6 +218,18 @@ server <- function(input, output, session) {
     leafletProxy("SegmentMap") %>%
       clearGroup("highlighted_polygon") %>%
       setView(lng = -76.2, lat = 38.3, zoom = 8)
+  })
+  
+  #observe for when map is clicked
+  observeEvent(input$SegmentMap_shape_click, {
+    click <- input$SegmentMap_shape_click
+    #make sure the map only responds to clicks on actual polygons
+    if (is.null(click)) return()
+    #note: click ids need to be unique. Using CBSEG_104 as a unqiue proxy, then filter back to regular CBPSEG
+    cbseg104_clicked_segment <- click$id
+    cbpseg <- baysegments$CBPSEG[baysegments$CBSEG_104 == cbseg104_clicked_segment]
+    # Update the dropdown menu to match the clicked segment, map will automatically zoom
+    updateSelectInput(session, "segment_selection", selected = cbpseg)
   })
   
   ######## SAV Bar Graph
