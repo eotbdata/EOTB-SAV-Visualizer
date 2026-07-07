@@ -137,13 +137,13 @@ ui <- fluidPage(
            card(p("Segment Map", align="center"),
                 leafletOutput("SegmentMap", height="500px"))
     )
-  # ),
-  # br(),
-  # fluidRow(
-  #   column(width = 12,
-  #          plotlyOutput("SAVCoverage"))
-  # ),
-  # br(),
+   ),
+  br(),
+  fluidRow(
+    column(width = 12,
+           plotlyOutput("SAVCoverage"))
+  )
+  # ,br(),
   # h4("VIMS SAV Aerial Survey Bed Locations (2019-2023)", style="text-align:center"),
   # fluidRow(
   #   column(width=12,
