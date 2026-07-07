@@ -68,20 +68,20 @@ baysegments <- merge(baysegments, segment_mapping, by=c("CBPSEG"))
 
 #bring in stuff for the sav map
 
-sav2023 <- st_read(here("2023shp"))
-sav2023 <- st_transform(sav2023, crs = "+proj=longlat +datum=WGS84") #transform to DD
-
-sav2022 <- st_read(here("2022shp"))
-sav2022 <- st_transform(sav2022, crs = "+proj=longlat +datum=WGS84") #transform to DD
-
-sav2021 <- st_read(here("2021shp"), promote_to_multi=FALSE)
-sav2021 <- st_transform(sav2021, crs = "+proj=longlat +datum=WGS84") #transform to DD
-
-sav2020 <- st_read(here("2020shp"), promote_to_multi=FALSE)
-sav2020 <- st_transform(sav2020, crs = "+proj=longlat +datum=WGS84") #transform to DD
-
-sav2019 <- st_read(here("2019shp"), promote_to_multi=FALSE)
-sav2019 <- st_transform(sav2019, crs = "+proj=longlat +datum=WGS84") #transform to DD
+# sav2023 <- st_read(here("2023shp"))
+# sav2023 <- st_transform(sav2023, crs = "+proj=longlat +datum=WGS84") #transform to DD
+# 
+# sav2022 <- st_read(here("2022shp"))
+# sav2022 <- st_transform(sav2022, crs = "+proj=longlat +datum=WGS84") #transform to DD
+# 
+# sav2021 <- st_read(here("2021shp"), promote_to_multi=FALSE)
+# sav2021 <- st_transform(sav2021, crs = "+proj=longlat +datum=WGS84") #transform to DD
+# 
+# sav2020 <- st_read(here("2020shp"), promote_to_multi=FALSE)
+# sav2020 <- st_transform(sav2020, crs = "+proj=longlat +datum=WGS84") #transform to DD
+# 
+# sav2019 <- st_read(here("2019shp"), promote_to_multi=FALSE)
+# sav2019 <- st_transform(sav2019, crs = "+proj=longlat +datum=WGS84") #transform to DD
 
 
 ################## UI ##########################################################
@@ -137,20 +137,20 @@ ui <- fluidPage(
            card(p("Segment Map", align="center"),
                 leafletOutput("SegmentMap", height="500px"))
     )
-  ),
-  br(),
-  fluidRow(
-    column(width = 12,
-           plotlyOutput("SAVCoverage"))
-  ),
-  br(),
-  h4("VIMS SAV Aerial Survey Bed Locations (2019-2023)", style="text-align:center"),
-  fluidRow(
-    column(width=12,
-           leafglOutput("CoverageMap", height = "800px")
-    )
-  ),
-  br()
+  # ),
+  # br(),
+  # fluidRow(
+  #   column(width = 12,
+  #          plotlyOutput("SAVCoverage"))
+  # ),
+  # br(),
+  # h4("VIMS SAV Aerial Survey Bed Locations (2019-2023)", style="text-align:center"),
+  # fluidRow(
+  #   column(width=12,
+  #          leafglOutput("CoverageMap", height = "800px")
+  #   )
+  # ),
+  # br()
 )
 
 ################ SERVER ########################################################
@@ -381,37 +381,37 @@ server <- function(input, output, session) {
     }
   )
   
-  output$CoverageMap <- renderLeaflet({
-    
-    savmap <- leaflet() %>%
-      addProviderTiles(providers$Esri.WorldTopoMap) %>%
-      setView(lng = -76.3, lat = 38.7, zoom = 8) %>%
-      addGlPolygons(data = sav2019, color = "#B9DCAC", weight = 2, opacity = 1,
-                    popup = "SAV Coverage 2019",
-                    group = "SAV Coverage 2019") %>%
-      addGlPolygons(data = sav2020, color = "#9ECF8C", weight = 2, opacity = 1,
-                    popup = "SAV Coverage 2020",
-                    group = "SAV Coverage 2020") %>%
-      addGlPolygons(data = sav2021, color = "#82C16C", weight = 2, opacity = 1,
-                    popup = "SAV Coverage 2021",
-                    group = "SAV Coverage 2021") %>%
-      addGlPolygons(data = sav2022, color = "#67B44B", weight = 2, opacity = 1,
-                    popup = "SAV Coverage 2022",
-                    group = "SAV Coverage 2022") %>%
-      addGlPolygons(data = sav2023, color = "#427330", weight = 2, opacity = 1,
-                    popup = "SAV Coverage 2023",
-                    group = "SAV Coverage 2023") %>%
-      addLayersControl(
-        overlayGroups = c("SAV Coverage 2019",
-                          "SAV Coverage 2020",
-                          "SAV Coverage 2021",
-                          "SAV Coverage 2022",
-                          "SAV Coverage 2023"
-        ),
-        options = layersControlOptions(collapsed = FALSE))
-    savmap
-
-  })
+  # output$CoverageMap <- renderLeaflet({
+  #   
+  #   savmap <- leaflet() %>%
+  #     addProviderTiles(providers$Esri.WorldTopoMap) %>%
+  #     setView(lng = -76.3, lat = 38.7, zoom = 8) %>%
+  #     addGlPolygons(data = sav2019, color = "#B9DCAC", weight = 2, opacity = 1,
+  #                   popup = "SAV Coverage 2019",
+  #                   group = "SAV Coverage 2019") %>%
+  #     addGlPolygons(data = sav2020, color = "#9ECF8C", weight = 2, opacity = 1,
+  #                   popup = "SAV Coverage 2020",
+  #                   group = "SAV Coverage 2020") %>%
+  #     addGlPolygons(data = sav2021, color = "#82C16C", weight = 2, opacity = 1,
+  #                   popup = "SAV Coverage 2021",
+  #                   group = "SAV Coverage 2021") %>%
+  #     addGlPolygons(data = sav2022, color = "#67B44B", weight = 2, opacity = 1,
+  #                   popup = "SAV Coverage 2022",
+  #                   group = "SAV Coverage 2022") %>%
+  #     addGlPolygons(data = sav2023, color = "#427330", weight = 2, opacity = 1,
+  #                   popup = "SAV Coverage 2023",
+  #                   group = "SAV Coverage 2023") %>%
+  #     addLayersControl(
+  #       overlayGroups = c("SAV Coverage 2019",
+  #                         "SAV Coverage 2020",
+  #                         "SAV Coverage 2021",
+  #                         "SAV Coverage 2022",
+  #                         "SAV Coverage 2023"
+  #       ),
+  #       options = layersControlOptions(collapsed = FALSE))
+  #   savmap
+  # 
+  # })
   
 }
 
