@@ -71,7 +71,7 @@ baysegments <- merge(baysegments, segment_mapping, by=c("CBPSEG"))
 sav2023 <- st_read(here("2023shp"))
 sav2023 <- st_transform(sav2023, crs = "+proj=longlat +datum=WGS84") #transform to DD
 
-sav2022 <- st_read(here("2022shp")) 
+sav2022 <- st_read(here("2022shp"))
 sav2022 <- st_transform(sav2022, crs = "+proj=longlat +datum=WGS84") #transform to DD
 
 sav2021 <- st_read(here("2021shp"), promote_to_multi=FALSE)
@@ -147,7 +147,7 @@ ui <- fluidPage(
   h4("VIMS SAV Aerial Survey Bed Locations (2019-2023)", style="text-align:center"),
   fluidRow(
     column(width=12,
-           leafletOutput("CoverageMap", height = "800px")
+           leafglOutput("CoverageMap", height = "800px")
     )
   ),
   br()
