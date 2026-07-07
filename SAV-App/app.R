@@ -71,17 +71,11 @@ baysegments <- merge(baysegments, segment_mapping, by=c("CBPSEG"))
 sav2023 <- st_read(here("2023shp"))
 sav2023 <- st_transform(sav2023, crs = "+proj=longlat +datum=WGS84") #transform to DD
 
-sav2022 <- st_read(here("2022shp"))
-sav2022 <- st_transform(sav2022, crs = "+proj=longlat +datum=WGS84") #transform to DD
+sav2022 <- st_read(here("2022shp_smpl"), promote_to_multi=FALSE)
+sav2021 <- st_read(here("2021shp_smpl"), promote_to_multi=FALSE)
+sav2020 <- st_read(here("2020shp_smpl"), promote_to_multi=FALSE)
+sav2019 <- st_read(here("2019shp_smpl"), promote_to_multi=FALSE)
 
-sav2021 <- st_read(here("2021shp"), promote_to_multi=FALSE)
-sav2021 <- st_transform(sav2021, crs = "+proj=longlat +datum=WGS84") #transform to DD
-
-sav2020 <- st_read(here("2020shp"), promote_to_multi=FALSE)
-sav2020 <- st_transform(sav2020, crs = "+proj=longlat +datum=WGS84") #transform to DD
-
-sav2019 <- st_read(here("2019shp"), promote_to_multi=FALSE)
-sav2019 <- st_transform(sav2019, crs = "+proj=longlat +datum=WGS84") #transform to DD
 
 
 ################## UI ##########################################################
