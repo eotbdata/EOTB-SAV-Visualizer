@@ -67,14 +67,11 @@ dynamic_choices <- setNames(segment_mapping$CBPSEG, segment_mapping$Segment_Name
 baysegments <- merge(baysegments, segment_mapping, by=c("CBPSEG"))
 
 #bring in stuff for the sav map
+#note: MW will try just doing 3 years of simplified polygons for speed
 
-sav2023 <- st_read(here("2023shp"))
-sav2023 <- st_transform(sav2023, crs = "+proj=longlat +datum=WGS84") #transform to DD
-
-sav2022 <- st_read(here("2022shp_smpl"), promote_to_multi=FALSE)
-sav2021 <- st_read(here("2021shp_smpl"), promote_to_multi=FALSE)
-sav2020 <- st_read(here("2020shp_smpl"), promote_to_multi=FALSE)
-sav2019 <- st_read(here("2019shp_smpl"), promote_to_multi=FALSE)
+sav2024 <- st_read(here("sav2024_smpl"), promote_to_multi=FALSE)
+sav2023 <- st_read(here("sav2023_smpl"), promote_to_multi=FALSE)
+sav2022 <- st_read(here("sav2022_smpl"), promote_to_multi=FALSE)
 
 
 
