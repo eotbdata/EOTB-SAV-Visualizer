@@ -377,27 +377,19 @@ server <- function(input, output, session) {
     savmap <- leaflet() %>%
       addProviderTiles(providers$Esri.WorldTopoMap) %>%
       setView(lng = -76.3, lat = 38.7, zoom = 8) %>%
-      addGlPolygons(data = sav2019, color = "#B9DCAC", weight = 2, opacity = 1,
-                    popup = "SAV Coverage 2019",
-                    group = "SAV Coverage 2019") %>%
-      addGlPolygons(data = sav2020, color = "#9ECF8C", weight = 2, opacity = 1,
-                    popup = "SAV Coverage 2020",
-                    group = "SAV Coverage 2020") %>%
-      addGlPolygons(data = sav2021, color = "#82C16C", weight = 2, opacity = 1,
-                    popup = "SAV Coverage 2021",
-                    group = "SAV Coverage 2021") %>%
-      addGlPolygons(data = sav2022, color = "#67B44B", weight = 2, opacity = 1,
+      addGlPolygons(data = sav2022, color = "#B9DCAC", weight = 2, opacity = 1,
                     popup = "SAV Coverage 2022",
                     group = "SAV Coverage 2022") %>%
-      addGlPolygons(data = sav2023, color = "#427330", weight = 2, opacity = 1,
+      addGlPolygons(data = sav2023, color = "#82C16C", weight = 2, opacity = 1,
                     popup = "SAV Coverage 2023",
                     group = "SAV Coverage 2023") %>%
+      addGlPolygons(data = sav2024, color = "#427330", weight = 2, opacity = 1,
+                    popup = "SAV Coverage 2024",
+                    group = "SAV Coverage 2024") %>%
       addLayersControl(
-        overlayGroups = c("SAV Coverage 2019",
-                          "SAV Coverage 2020",
-                          "SAV Coverage 2021",
-                          "SAV Coverage 2022",
-                          "SAV Coverage 2023"
+        overlayGroups = c("SAV Coverage 2022",
+                          "SAV Coverage 2023",
+                          "SAV Coverage 2024"
         ),
         options = layersControlOptions(collapsed = FALSE))
     savmap
