@@ -31,22 +31,22 @@ SAVdata <- fread(here("SAV-App", "SAVdata_alphabetized.csv"))
 
 #reformat SAV data
 SAVdata_long <- melt(SAVdata, 
-                     id.vars=c(1:5, 86),
+                     id.vars=c(1:5, 88),
                      measure.vars=c("1984", "1985", "1986", "1987", "1989", "1990", "1991", "1992", "1993",
                                     "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002",
                                     "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011",
                                     "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020",
-                                    "2021", "2022", "2023", "2024"),
+                                    "2021", "2022", "2023", "2024", "2025"),
                      variable.name = "Year", value.name = "Coverage"
 )
 
 SAVdata_comments <- melt(SAVdata, 
-                         id.vars=c(1:5, 86),
+                         id.vars=c(1:5, 88),
                          measure.vars=c("_1984", "_1985", "_1986", "_1987", "_1989", "_1990", "_1991", "_1992", "_1993",
                                         "_1994", "_1995", "_1996", "_1997", "_1998", "_1999", "_2000", "_2001", "_2002",
                                         "_2003", "_2004", "_2005", "_2006", "_2007", "_2008", "_2009", "_2010", "_2011",
                                         "_2012", "_2013", "_2014", "_2015", "_2016", "_2017", "2018_nd", "2019_nd", "2020_nd",
-                                        "2021_nd", "2022_nd", "2023_nd", "2024_nd"),
+                                        "2021_nd", "2022_nd", "2023_nd", "2024_nd", "2025_nd"),
                          variable.name = "Year", value.name = "Comments"
 )
 SAVdata_comments <- SAVdata_comments[, Year := gsub("_|n|d", "", Year)]
@@ -69,9 +69,9 @@ baysegments <- merge(baysegments, segment_mapping, by=c("CBPSEG"))
 #bring in stuff for the sav map
 #note: MW will try just doing 3 years of simplified polygons for speed
 
+sav2025 <- st_read(here("sav2025"), promote_to_multi=FALSE)
 sav2024 <- st_read(here("sav2024_smpl"), promote_to_multi=FALSE)
 sav2023 <- st_read(here("sav2023_smpl"), promote_to_multi=FALSE)
-sav2022 <- st_read(here("sav2022_smpl"), promote_to_multi=FALSE)
 
 
 
@@ -135,7 +135,7 @@ ui <- fluidPage(
            plotlyOutput("SAVCoverage"))
   ),
   br(),
-  h4("VIMS SAV Aerial Survey Bed Locations (2019-2023)", style="text-align:center"),
+  h4("VIMS SAV Aerial Survey Bed Locations (2023-2025)", style="text-align:center"),
   fluidRow(
     column(width=12,
            leafglOutput("CoverageMap", height = "800px")
@@ -377,19 +377,19 @@ server <- function(input, output, session) {
     savmap <- leaflet() %>%
       addProviderTiles(providers$Esri.WorldTopoMap) %>%
       setView(lng = -76.3, lat = 38.7, zoom = 8) %>%
-      addGlPolygons(data = sav2022, color = "#B9DCAC", weight = 2, opacity = 1,
-                    popup = "SAV Coverage 2022",
-                    group = "SAV Coverage 2022") %>%
-      addGlPolygons(data = sav2023, color = "#82C16C", weight = 2, opacity = 1,
+      addGlPolygons(data = sav2023, color = "#B9DCAC", weight = 2, opacity = 1,
                     popup = "SAV Coverage 2023",
                     group = "SAV Coverage 2023") %>%
-      addGlPolygons(data = sav2024, color = "#427330", weight = 2, opacity = 1,
+      addGlPolygons(data = sav2024, color = "#82C16C", weight = 2, opacity = 1,
                     popup = "SAV Coverage 2024",
                     group = "SAV Coverage 2024") %>%
+      addGlPolygons(data = sav2025, color = "#427330", weight = 2, opacity = 1,
+                    popup = "SAV Coverage 2025",
+                    group = "SAV Coverage 2025") %>%
       addLayersControl(
-        overlayGroups = c("SAV Coverage 2022",
-                          "SAV Coverage 2023",
-                          "SAV Coverage 2024"
+        overlayGroups = c("SAV Coverage 2023",
+                          "SAV Coverage 2024",
+                          "SAV Coverage 2025"
         ),
         options = layersControlOptions(collapsed = FALSE))
     savmap
