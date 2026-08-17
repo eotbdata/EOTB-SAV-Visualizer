@@ -69,7 +69,7 @@ baysegments <- merge(baysegments, segment_mapping, by=c("CBPSEG"))
 #bring in stuff for the sav map
 #note: MW will try just doing 3 years of simplified polygons for speed
 
-sav2025 <- st_read(here("sav2025"), promote_to_multi=FALSE)
+sav2025 <- st_read(here("sav2025_smpl"), promote_to_multi=FALSE)
 sav2024 <- st_read(here("sav2024_smpl"), promote_to_multi=FALSE)
 sav2023 <- st_read(here("sav2023_smpl"), promote_to_multi=FALSE)
 
