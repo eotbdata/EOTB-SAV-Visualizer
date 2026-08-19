@@ -69,9 +69,9 @@ baysegments <- merge(baysegments, segment_mapping, by=c("CBPSEG"))
 #bring in stuff for the sav map
 #note: MW will try just doing 3 years of simplified polygons for speed
 
-sav2025 <- st_read(here("sav2025_smpl"), promote_to_multi=FALSE)
-sav2024 <- st_read(here("sav2024_smpl"), promote_to_multi=FALSE)
-sav2023 <- st_read(here("sav2023_smpl"), promote_to_multi=FALSE)
+sav2025 <- st_read(here("sav2025simpl"), promote_to_multi=FALSE)
+sav2024 <- st_read(here("sav2024simpl"), promote_to_multi=FALSE)
+sav2023 <- st_read(here("sav2023simpl"), promote_to_multi=FALSE)
 
 
 
@@ -136,6 +136,7 @@ ui <- fluidPage(
   ),
   br(),
   h4("VIMS SAV Aerial Survey Bed Locations (2023-2025)", style="text-align:center"),
+  p("* Data Note: SAV Bed GIS Data is for display purposes only *", style="text-align:center"),
   fluidRow(
     column(width=12,
            leafglOutput("CoverageMap", height = "800px")
@@ -375,15 +376,15 @@ server <- function(input, output, session) {
   output$CoverageMap <- renderLeaflet({
 
     savmap <- leaflet() %>%
-      addProviderTiles(providers$Esri.WorldTopoMap) %>%
+      addProviderTiles(providers$Esri.WorldImagery) %>%
       setView(lng = -76.3, lat = 38.7, zoom = 8) %>%
       addGlPolygons(data = sav2023, color = "#B9DCAC", weight = 2, opacity = 1,
                     popup = "SAV Coverage 2023",
                     group = "SAV Coverage 2023") %>%
-      addGlPolygons(data = sav2024, color = "#82C16C", weight = 2, opacity = 1,
+      addGlPolygons(data = sav2024, color = "#67B44B", weight = 2, opacity = 1,
                     popup = "SAV Coverage 2024",
                     group = "SAV Coverage 2024") %>%
-      addGlPolygons(data = sav2025, color = "#427330", weight = 2, opacity = 1,
+      addGlPolygons(data = sav2025, color = "#0def2a", weight = 2, opacity = 1,
                     popup = "SAV Coverage 2025",
                     group = "SAV Coverage 2025") %>%
       addLayersControl(
