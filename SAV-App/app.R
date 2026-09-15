@@ -83,7 +83,7 @@ ui <- fluidPage(
   tags$div(
     style = "display: flex; justify-content: space-between; align-items: center; margin-top: 20px; margin-bottom: 20px;",
     tags$h3(("MD DNR's Submerged Aquatic Vegetation (SAV) Coverage"), style = "margin: 0;"),
-    tags$img(src = "DNR_logo_final.png", height = "60px")
+    tags$img(src = "DNR_logo_final.png", height = "20px")
   ),
   hr(),
   fluidRow(
