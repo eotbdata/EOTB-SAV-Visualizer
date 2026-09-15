@@ -80,12 +80,12 @@ ui <- fluidPage(
   
   # # Theme, title and DNR banner
   theme = bs_theme(preset = "flatly"),
-  tags$div(
-    style = "display: flex; justify-content: space-between; align-items: center; margin-top: 20px; margin-bottom: 30px;",
-    tags$h3(("MD DNR's Submerged Aquatic Vegetation (SAV) Coverage"), style = "margin: 0;"),
-    tags$img(src = "DNR_logo_final.png", height = "20px")
-  ),
-  hr(),
+  # tags$div(
+  #   style = "display: flex; justify-content: space-between; align-items: center; margin-top: 20px; margin-bottom: 30px;",
+  #   tags$h3(("MD DNR's Submerged Aquatic Vegetation (SAV) Coverage"), style = "margin: 0;"),
+  #   tags$img(src = "DNR_logo_final.png", height = "20px")
+  # ),
+  # hr(),
   fluidRow(
     column(width = 12,
            plotlyOutput("SAVCoverage"))
