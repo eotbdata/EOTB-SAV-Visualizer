@@ -86,7 +86,11 @@ ui <- fluidPage(
     tags$img(src = "DNR_logo_final.png", height = "60px")
   ),
   hr(),
-  
+  fluidRow(
+    column(width = 12,
+           plotlyOutput("SAVCoverage"))
+  ),
+  br(),
   fluidRow(
     column(width = 5,
            wellPanel(selectInput(inputId = "segment_selection",
@@ -115,7 +119,8 @@ ui <- fluidPage(
                        <a href='https://www.vims.edu/research/units/programs/sav/methods/' target='_blank'>annual aerial surveys</a>
                        conducted by the Virginia Institute of Marine Science (VIMS).</p>
                        
-                       <p>To begin, select a Bay segment from the drop-down menu above. 
+                       <p>The chart displays SAV coverage across the State of Maryland. To examine a specific segment of the bay,
+                       select a bay segment from the drop-down menu above or click the segment in the map. 
                        The tool will display the SAV coverage measured from 1984 to the present 
                        in the chart below, and highlight that specific area on the map to the right. 
                        You can click 'Recenter Map' to reset the view, or use the map navigation buttons
@@ -130,13 +135,11 @@ ui <- fluidPage(
     )
    ),
   br(),
-  fluidRow(
-    column(width = 12,
-           plotlyOutput("SAVCoverage"))
-  ),
-  br(),
   h4("VIMS SAV Aerial Survey Bed Locations (2023-2025)", style="text-align:center"),
   p("* Data Note: SAV Bed GIS Data is for display purposes only *", style="text-align:center"),
+  p("If you would like to examine where the SAV beds are that are counted in the charts above, this map displays 2023-2025 SAV bed locations.
+    Zoom to different locations with a mouse wheel, or by the +/- buttons in the top left corner. By default, all three layers are selected in the
+    top right corner. Deselecting the check box will hide the layer from that year."),
   fluidRow(
     column(width=12,
            leafglOutput("CoverageMap", height = "800px")
