@@ -131,7 +131,7 @@ ui <- fluidPage(
     ),
     column(width = 7,
            card(p("Segment Map", align="center"),
-                leafletOutput("SegmentMap", height="550px"))
+                leafletOutput("SegmentMap", height="500px"))
     )
    ),
   br(),
