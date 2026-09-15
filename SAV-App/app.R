@@ -126,12 +126,12 @@ ui <- fluidPage(
                        You can click 'Recenter Map' to reset the view, or use the map navigation buttons
                        to explore the Chesapeake Bay.</p>"
                      )),
-                     style = "padding-bottom: 50px;"
+                     style = "padding-bottom: 25px;"
            )
     ),
     column(width = 7,
            card(p("Segment Map", align="center"),
-                leafletOutput("SegmentMap", height="500px"))
+                leafletOutput("SegmentMap", height="550px"))
     )
    ),
   br(),
