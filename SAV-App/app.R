@@ -122,7 +122,7 @@ ui <- fluidPage(
                        <p>The chart displays SAV coverage across the State of Maryland. To examine a specific segment of the bay,
                        select a bay segment from the drop-down menu above or click the segment in the map. 
                        The tool will display the SAV coverage measured from 1984 to the present 
-                       in the chart below, and highlight that specific area on the map to the right. 
+                       in the chart above, and highlight that specific area on the map to the right. 
                        You can click 'Recenter Map' to reset the view, or use the map navigation buttons
                        to explore the Chesapeake Bay.</p>"
                      )),
@@ -139,7 +139,8 @@ ui <- fluidPage(
   p("* Data Note: SAV Bed GIS Data is for display purposes only *", style="text-align:center"),
   p("If you would like to examine where the SAV beds are that are counted in the charts above, this map displays 2023-2025 SAV bed locations.
     Zoom to different locations with a mouse wheel, or by the +/- buttons in the top left corner. By default, all three layers are selected in the
-    top right corner. Deselecting the check box will hide the layer from that year."),
+    top right corner. Deselecting the check box will hide the layer from that year. 2025 SAV bed data is currently preliminary and displays all SAV beds
+    throughout the Chesapeake Bay. 2023-2024 data displays bed data for the State of Maryland only."),
   fluidRow(
     column(width=12,
            leafglOutput("CoverageMap", height = "800px")
